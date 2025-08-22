@@ -61,7 +61,7 @@ params={
 if st.button("Predict Fare"):
     try:
         url = 'https://newtaxifare-1096775302336.europe-west1.run.app/predict'
-        response = requests.post(url, params=params)
+        response = requests.get(url, params=params)
         response.raise_for_status()  # Raises an error if the request failed
         prediction = response.json()
         st.success(f"Predicted Fare: ${prediction['fare']:.2f}")
