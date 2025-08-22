@@ -109,6 +109,7 @@ if st.button("Predict Fare"):
         response = requests.get(url, params=params)
         response.raise_for_status()  # Raises an error if the request failed
         prediction = response.json()
+        fare = prediction['fare']
         # st.success(f"Predicted Fare: ${prediction['fare']:.2f}")
         st.markdown(
             f'<p style="font-size:40px; color:green;">Predicted Fare: ${fare:.2f}</p>',
