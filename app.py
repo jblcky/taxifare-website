@@ -115,7 +115,7 @@ st.subheader("Your Ride Details")
 
 
 # --- Auto-predict fare ---
-def get_fare():
+def get_fare(params):
     try:
         url = 'https://newtaxifare-1096775302336.europe-west1.run.app/predict'
         response = requests.post(url, json=params)
@@ -127,5 +127,5 @@ def get_fare():
 
 # Call prediction if coordinates changed or first load
 if coordinates_changed or "fare_predicted" not in st.session_state:
-    get_fare()
+    get_fare(params)
     st.session_state.fare_predicted = True
