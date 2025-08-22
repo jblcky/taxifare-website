@@ -89,7 +89,7 @@ params={
     "dropoff_latitude": dropoff_latitude,
     "passenger_count": passenger_count
 }
-st.subheader("Your Ride Details")
+st.subheader("Predicted Fare")
 
 # --- Show Map ---
 # st.subheader("Pickup & Dropoff Locations")
