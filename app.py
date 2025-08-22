@@ -90,7 +90,6 @@ params={
     "passenger_count": passenger_count
 }
 st.subheader("Your Ride Details")
-st.json(params)
 
 # --- Show Map ---
 # st.subheader("Pickup & Dropoff Locations")
