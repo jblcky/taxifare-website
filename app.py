@@ -10,7 +10,7 @@ import requests
 st.set_page_config(page_title="Taxi Fare Predictor", layout="centered")
 
 st.title("🚖 Taxi Fare Predictor")
-st.write("Enter the ride details below to predict fare:")
+# st.write("Enter the ride details below to predict fare:")
 
 # --- Initialize session state for pickup/dropoff ---
 if "pickup" not in st.session_state:
