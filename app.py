@@ -35,7 +35,7 @@ st.write("Click on the map to set the location:")
 
 
 # Render map with click
-map_data = st_folium(m, width=700, height=500, returned_objects=["last_clicked"])
+map_data = st_folium(m, width=1200, height=700, returned_objects=["last_clicked"])
 
 if map_data["last_clicked"]:
     lat = map_data["last_clicked"]["lat"]
