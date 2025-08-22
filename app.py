@@ -57,6 +57,17 @@ params={
     "passenger_count": passenger_count
 }
 
+# --- Show Map ---
+st.subheader("Pickup & Dropoff Locations")
+map_data = pd.DataFrame([
+    {"lat": pickup_latitude, "lon": pickup_longitude, "type": "Pickup"},
+    {"lat": dropoff_latitude, "lon": dropoff_longitude, "type": "Dropoff"}
+])
+st.map(map_data[['lat', 'lon']])
+
+# Optional: show markers with more info
+st.write("Pickup is the first point (blue), Dropoff is the second point (red).")
+
 # --- Predict Button ---
 if st.button("Predict Fare"):
     try:
