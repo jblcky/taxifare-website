@@ -112,7 +112,7 @@ if st.button("Predict Fare"):
         fare = prediction['fare']
         # st.success(f"Predicted Fare: ${prediction['fare']:.2f}")
         st.markdown(
-            f'<p style="font-size:100px; color:black;">Predicted Fare: ${fare:.2f}</p>',
+            f'<p style="font-size:100px; color:black; font-weight:bold;">${fare:.2f}</p>',
             unsafe_allow_html=True
         )
     except Exception as e:
