@@ -1,13 +1,49 @@
 import streamlit as st
+from streamlit_folium import st_folium
+import folium
 import pandas as pd
 from datetime import datetime
 import requests
+
 
 # --- Streamlit App ---
 st.set_page_config(page_title="Taxi Fare Predictor", layout="centered")
 
 st.title("🚖 Taxi Fare Predictor")
 st.write("Enter the ride details below to predict fare:")
+
+# --- Initialize session state for pickup/dropoff ---
+if "pickup" not in st.session_state:
+    st.session_state.pickup = {"lat": 40.748817, "lon": -73.985428}
+if "dropoff" not in st.session_state:
+    st.session_state.dropoff = {"lat": 40.748817, "lon": -73.985428}
+if "selecting" not in st.session_state:
+    st.session_state.selecting = "pickup"  # toggle between pickup and dropoff
+
+# --- Map for selecting points ---
+m = folium.Map(location=[40.748817, -73.985428], zoom_start=12)
+folium.Marker([st.session_state.pickup["lat"], st.session_state.pickup["lon"]],
+              tooltip="Pickup", icon=folium.Icon(color="green")).add_to(m)
+folium.Marker([st.session_state.dropoff["lat"], st.session_state.dropoff["lon"]],
+              tooltip="Dropoff", icon=folium.Icon(color="red")).add_to(m)
+
+
+st.write("Select point type:")
+point_type = st.radio("Choose point to set on map:", ["Pickup", "Dropoff"])
+
+st.write("Click on the map to set the location:")
+
+
+# Render map with click
+map_data = st_folium(m, width=700, height=500, returned_objects=["last_clicked"])
+
+if map_data["last_clicked"]:
+    lat = map_data["last_clicked"]["lat"]
+    lon = map_data["last_clicked"]["lng"]
+    if point_type == "Pickup":
+        st.session_state.pickup = {"lat": lat, "lon": lon}
+    else:
+        st.session_state.dropoff = {"lat": lat, "lon": lon}
 
 # --- Input Fields ---
 pickup_datetime = st.date_input(
@@ -20,26 +56,11 @@ pickup_time = st.time_input(
 )
 pickup_datetime_str = f"{pickup_datetime} {pickup_time}"
 
-pickup_longitude = st.number_input(
-    "Pickup Longitude",
-    value=-73.985428,
-    format="%.6f"
-)
-pickup_latitude = st.number_input(
-    "Pickup Latitude",
-    value=40.748817,
-    format="%.6f"
-)
-dropoff_longitude = st.number_input(
-    "Dropoff Longitude",
-    value=-73.985428,
-    format="%.6f"
-)
-dropoff_latitude = st.number_input(
-    "Dropoff Latitude",
-    value=40.748817,
-    format="%.6f"
-)
+pickup_latitude = st.session_state.pickup["lat"]
+pickup_longitude = st.session_state.pickup["lon"]
+dropoff_latitude = st.session_state.dropoff["lat"]
+dropoff_longitude = st.session_state.dropoff["lon"]
+
 passenger_count = st.number_input(
     "Passenger Count",
     min_value=1, max_value=10, value=1
