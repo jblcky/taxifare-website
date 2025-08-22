@@ -80,9 +80,7 @@ passenger_count = st.number_input(
     min_value=1, max_value=10, value=1
 )
 
-# --- Display Inputs ---
-st.subheader("Your Ride Details")
-
+# --- Show Ride Details ---
 params={
     "pickup_datetime": pickup_datetime_str,
     "pickup_longitude": pickup_longitude,
@@ -91,6 +89,8 @@ params={
     "dropoff_latitude": dropoff_latitude,
     "passenger_count": passenger_count
 }
+st.subheader("Your Ride Details")
+st.json(params)
 
 # --- Show Map ---
 # st.subheader("Pickup & Dropoff Locations")
