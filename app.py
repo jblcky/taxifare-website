@@ -127,5 +127,13 @@ def get_fare(params):
 
 # Call prediction if coordinates changed or first load
 if coordinates_changed or "fare_predicted" not in st.session_state:
+    params = {
+        "pickup_datetime": pickup_datetime_str,
+        "pickup_longitude": st.session_state.pickup["lon"],
+        "pickup_latitude": st.session_state.pickup["lat"],
+        "dropoff_longitude": st.session_state.dropoff["lon"],
+        "dropoff_latitude": st.session_state.dropoff["lat"],
+        "passenger_count": passenger_count
+    }
     get_fare(params)
     st.session_state.fare_predicted = True
