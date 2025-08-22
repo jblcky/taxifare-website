@@ -28,7 +28,7 @@ folium.Marker([st.session_state.dropoff["lat"], st.session_state.dropoff["lon"]]
               tooltip="Dropoff", icon=folium.Icon(color="red")).add_to(m)
 
 
-st.write("Select point type:")
+# st.write("Select point type:")
 point_type = st.radio("Choose point to set on map:", ["Pickup", "Dropoff"])
 
 st.write("Click on the map to set the location:")
