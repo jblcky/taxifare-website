@@ -37,13 +37,27 @@ st.write("Click on the map to set the location:")
 # Render map with click
 map_data = st_folium(m, width=700, height=500, returned_objects=["last_clicked"])
 
+# if map_data["last_clicked"]:
+#     lat = map_data["last_clicked"]["lat"]
+#     lon = map_data["last_clicked"]["lng"]
+#     if point_type == "Pickup":
+#         st.session_state.pickup = {"lat": lat, "lon": lon}
+#     else:
+#         st.session_state.dropoff = {"lat": lat, "lon": lon}
+
+# --- Update coordinates if clicked ---
+coordinates_changed = False
 if map_data["last_clicked"]:
     lat = map_data["last_clicked"]["lat"]
     lon = map_data["last_clicked"]["lng"]
     if point_type == "Pickup":
-        st.session_state.pickup = {"lat": lat, "lon": lon}
+        if (st.session_state.pickup["lat"], st.session_state.pickup["lon"]) != (lat, lon):
+            st.session_state.pickup = {"lat": lat, "lon": lon}
+            coordinates_changed = True
     else:
-        st.session_state.dropoff = {"lat": lat, "lon": lon}
+        if (st.session_state.dropoff["lat"], st.session_state.dropoff["lon"]) != (lat, lon):
+            st.session_state.dropoff = {"lat": lat, "lon": lon}
+            coordinates_changed = True
 
 # --- Input Fields ---
 pickup_datetime = st.date_input(
@@ -90,12 +104,29 @@ params={
 # st.write("Pickup is the first point (blue), Dropoff is the second point (red).")
 
 # --- Predict Button ---
-if st.button("Predict Fare"):
+# if st.button("Predict Fare"):
+#     try:
+#         url = 'https://newtaxifare-1096775302336.europe-west1.run.app/predict'
+#         response = requests.get(url, params=params)
+#         response.raise_for_status()  # Raises an error if the request failed
+#         prediction = response.json()
+#         st.success(f"Predicted Fare: ${prediction['fare']:.2f}")
+#     except Exception as e:
+#         st.error(f"Error calling prediction API: {e}")
+
+
+# --- Auto-predict fare ---
+def get_fare():
     try:
         url = 'https://newtaxifare-1096775302336.europe-west1.run.app/predict'
-        response = requests.get(url, params=params)
-        response.raise_for_status()  # Raises an error if the request failed
+        response = requests.post(url, json=params)
+        response.raise_for_status()
         prediction = response.json()
         st.success(f"Predicted Fare: ${prediction['fare']:.2f}")
     except Exception as e:
         st.error(f"Error calling prediction API: {e}")
+
+# Call prediction if coordinates changed or first load
+if coordinates_changed or "fare_predicted" not in st.session_state:
+    get_fare()
+    st.session_state.fare_predicted = True
